@@ -30,8 +30,4 @@ test:
 
 production:
   <<: *default
-  host: tiny.db.elephantsql.com
-  database: bwioqeiw
-  username: bwioqeiw
-  password: <%= Rails.application.secrets.db_password %>
-  database: db/production.sqlite3
+  url: <%= ENV['ELEPHANTSQL_KEY'] %>
