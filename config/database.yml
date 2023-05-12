@@ -15,7 +15,7 @@ development:
   host: localhost
   database: letter_heals_v1_dev
   username: rails_coinswift
-  password: <%= Rails.application.secrets.db_password %>
+  password: nonoyako11
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -23,11 +23,13 @@ development:
 test:
   <<: *default
   host: localhost
-  database: letter_heals_v1_dev
-  username: rails_coinswift
-  password: <%= Rails.application.secrets.db_password %>
   database: letter_heals_v1_test
+  username: rails_coinswift
+  password: nonoyako11
 
 production:
   <<: *default
-  url: <%= ENV['ELEPHANTSQL_KEY'] %>
+  host: tiny.db.elephantsql.com
+  database: bwioqeiw
+  username: bwioqeiw
+  password: B8jyKOaD9BW_qBCxI5CkpFHvZzKg_89J
