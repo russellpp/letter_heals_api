@@ -10,18 +10,60 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_12_134852) do
+ActiveRecord::Schema[7.0].define(version: 20_230_513_041_521) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension 'plpgsql'
 
-  create_table "users", force: :cascade do |t|
-    t.string "unique_id"
-    t.string "email"
-    t.string "phone_number"
-    t.integer "status"
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table 'comments', force: :cascade do |t|
+    t.string 'unique_id'
+    t.string 'title'
+    t.string 'body'
+    t.boolean 'anonymous'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
   end
 
+  create_table 'messages', force: :cascade do |t|
+    t.string 'unique_id'
+    t.string 'title'
+    t.string 'body'
+    t.boolean 'anonymous'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.string 'author'
+    t.string 'recipient'
+    t.index ['unique_id'], name: 'index_messages_on_unique_id', unique: true
+  end
+
+  create_table 'posts', force: :cascade do |t|
+    t.string 'unique_id'
+    t.string 'title'
+    t.string 'body'
+    t.string 'status'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.string 'author'
+    t.string 'reviewer'
+    t.index ['unique_id'], name: 'index_posts_on_unique_id', unique: true
+  end
+
+  create_table 'users', force: :cascade do |t|
+    t.string 'unique_id'
+    t.string 'email'
+    t.string 'phone_number'
+    t.integer 'status'
+    t.string 'name'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.string 'jti'
+    t.string 'profile_name'
+    t.boolean 'verified'
+    t.string 'role'
+    t.index ['unique_id'], name: 'index_users_on_unique_id', unique: true
+  end
+
+  add_foreign_key 'messages', 'users', column: 'author', primary_key: 'unique_id'
+  add_foreign_key 'messages', 'users', column: 'recipient', primary_key: 'unique_id'
+  add_foreign_key 'posts', 'users', column: 'author', primary_key: 'unique_id'
+  add_foreign_key 'posts', 'users', column: 'reviewer', primary_key: 'unique_id'
 end
