@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -59,6 +61,7 @@ gem 'rack-cors'
 gem 'pg'
 
 gem 'rubocop', require: false
+gem 'rubocop-rspec', '~> 2.22'
 
 gem 'active_model_serializers', '~> 0.10.13'
 
@@ -71,6 +74,7 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
 
   gem 'factory_bot_rails'
+  gem 'faker'
   gem 'json_matchers'
   gem 'rspec-rails', '~> 5.0.0'
 end

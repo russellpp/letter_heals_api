@@ -1,7 +1,21 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+# frozen_string_literal: true
+
+# seed for admin user
+admin_user1 = User.create(
+  email: 'admin001@letterheals.com',
+  phone_number: '+639456421990',
+  password: 'passworD#12345',
+  password_confirmation: 'passworD#12345'
+)
+
+admin_user2 = User.create(
+  email: 'admin002@letterheals.com',
+  phone_number: '+639456421991',
+  password: 'passworD#12345',
+  password_confirmation: 'passworD#12345'
+)
+
+# update admin user password digest
+
+admin_user1.update(verified: true)
+admin_user2.update(verified: true)

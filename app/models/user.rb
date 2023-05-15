@@ -1,7 +1,11 @@
+# frozen_string_literal: true
+
 require 'uuidtools'
 require 'securerandom'
 
 class User < ApplicationRecord
+  has_secure_password
+
   has_many :authored_messages, class_name: 'Message', foreign_key: :author, dependent: :destroy
   has_many :received_messages, class_name: 'Message', foreign_key: :recipient, dependent: :destroy
   has_many :authored_posts, class_name: 'Post', foreign_key: :author, dependent: :destroy
@@ -19,7 +23,12 @@ class User < ApplicationRecord
   validates :profile_name, presence: true
   validates :verified, inclusion: { in: [true, false] }
 
-  before_create :set_defaults
+  validates :password, presence: true, length: { minimum: 8 }
+  validates :password_confirmation, presence: true
+
+  validate :password_format_validation
+
+  before_validation :set_defaults, on: :create
 
   private
 
@@ -29,5 +38,16 @@ class User < ApplicationRecord
     self.verified ||= false
     self.status ||= 0
     self.role ||= 'user'
+    self.profile_name ||= email
+    self.name ||= email
+  end
+
+  def password_format_validation
+    return unless password.present?
+
+    return if password.match?(/\W/) && password.match?(/\d/) && password.match?(/[a-z]/) && password.match?(/[A-Z]/)
+
+    errors.add(:password,
+               'must contain at least one special character, one number, one lowercase letter and one uppercase letter.')
   end
 end
