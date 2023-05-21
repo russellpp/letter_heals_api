@@ -26,7 +26,13 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response).to have_http_status(:ok)
         expect(User.count).to eq(3)
         expect(User.last.email).to eq(user_params[:user][:email])
-        puts response.body
+        expect(User.last.name).to eq(user_params[:user][:email])
+        expect(User.last.profile_name).to eq(user_params[:user][:email])
+        expect(User.last.unique_id).not_to be_nil
+        expect(User.last.jti.length).to eq(32)
+        expect(User.last.role).to eq('user')
+        expect(User.last.status).to eq(0)
+        expect(User.last.verified).to eq(false)
         expect(JSON.parse(response.body)).to include(
           'messages' => ['Account successfully created.'],
           'user' => {
@@ -37,9 +43,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
           }
         )
       end
-
-      #   it 'returns a success message in JSON format' do
-      #   end
     end
 
     context 'when params are invalid' do

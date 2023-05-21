@@ -30,6 +30,35 @@ class User < ApplicationRecord
 
   before_validation :set_defaults, on: :create
 
+  def login!
+
+    if status == 1
+      logout!
+    end 
+    self.status = 1
+    save
+
+    token = self.encode_token
+    messages = { messages: ['User logged in.'], user: UserSerializer.new(self), token: token }
+    
+  end
+
+  def logout!
+    self.status = 0
+    self.jti = SecureRandom.hex(16).to_s
+    save
+    return true
+  end
+
+  def validate_jti(jti)
+    if jti == self.jti
+      return self
+    else
+      return nil
+    end
+    
+  end
+
   private
 
   def set_defaults
@@ -50,4 +79,19 @@ class User < ApplicationRecord
     errors.add(:password,
                'must contain at least one special character, one number, one lowercase letter and one uppercase letter.')
   end
+
+  def secret_key
+    Rails.application.credentials.jwt.secret_key
+  end
+
+  def encode_token
+    expiry = Time.now.to_i + 30 * 60
+    payload = { id: self.unique_id, jti: self.jti, exp: expiry }
+    JWT.encode(payload, secret_key, 'HS256')
+  end
+
+  # def decode_token(payload)
+  #   SECRET_KEY = Rails.application.credentials.jwt.secret_key
+  #   JWT.decode(token, SECRET_KEY, true, algorithm: 'HS256')
+  # end
 end

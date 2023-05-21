@@ -8,8 +8,10 @@ Rails.application.routes.draw do
       end
 
       # users
-      resources :users, only: %i[create show update] do
+      resources :users, only: %i[index create show update] do
         collection do
+          resources :posts, only: %i[index create show update]
+          resources :messages, only: %i[index create show]
         end
       end
       post 'register', to: 'users#create', as: 'register'
@@ -18,6 +20,7 @@ Rails.application.routes.draw do
       scope '/auth' do
         post 'verify', to: 'auth#confirm_verification'
         post 'login', to: 'auth#login', as: 'login'
+        put 'logout', to: 'auth#logout', as: 'logout'
         post 'password_reset', to: 'auth#password_reset'
         post 'confirm_reset', to: 'auth#confirm_password_reset'
         post 'send_code', to: 'auth#send_code'
