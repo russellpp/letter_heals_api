@@ -12,6 +12,7 @@ Rails.application.configure do
 
   # Turn false under Spring and add config.action_view.cache_template_loading = true.
   config.cache_classes = true
+  config.cache_store = :memory_store, { size: 64.megabytes }
 
   # Eager loading loads your whole application. When running a single test locally,
   # this probably isn't necessary. It's a good idea to do in a continuous integration
@@ -27,7 +28,6 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
-  config.cache_store = :null_store
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
@@ -59,4 +59,13 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  #   address: 'smtp.gmail.com',
+  #   port: 587,
+  #   user_name: 'letterheals.test001@gmail.com',
+  #   password: 'mifsjnuerduijoev',
+  #   authentication: 'plain',
+  #   enable_starttls_auto: true
+  # }
 end

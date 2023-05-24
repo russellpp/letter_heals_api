@@ -1,9 +1,18 @@
 # frozen_string_literal: true
 
 class UserMailer < ApplicationMailer
-  def verification_email(user)
+  def request_code(user, code, type)
     @user = user
-    mail(to: user.email, subject: 'Email Verification')
+    @code = code
+    if type == 'verification'
+      mail(to: user.email, subject: 'Email Verification') do |format|
+        format.html { render 'request_code' }
+      end
+    else
+      mail(to: user.email, subject: 'Confirm Password Reset') do |format|
+        format.html { render 'reset_code' }
+      end
+    end
   end
 
   def test_email(email)

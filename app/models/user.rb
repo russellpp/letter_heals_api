@@ -4,6 +4,8 @@ require 'uuidtools'
 require 'securerandom'
 
 class User < ApplicationRecord
+  include User::Verification
+
   has_secure_password
 
   has_many :authored_messages, class_name: 'Message', foreign_key: :author, dependent: :destroy
@@ -31,32 +33,35 @@ class User < ApplicationRecord
   before_validation :set_defaults, on: :create
 
   def login!
-
-    if status == 1
-      logout!
-    end 
+    logout! if status == 1
     self.status = 1
     save
 
-    token = self.encode_token
-    messages = { messages: ['User logged in.'], user: UserSerializer.new(self), token: token }
-    
+    token = encode_token
+    messages = { messages: ['User logged in.'], user: UserSerializer.new(self), token: }
   end
 
   def logout!
     self.status = 0
     self.jti = SecureRandom.hex(16).to_s
     save
-    return true
+    true
   end
 
   def validate_jti(jti)
-    if jti == self.jti
-      return self
-    else
-      return nil
-    end
-    
+    return self if jti == self.jti
+
+    nil
+  end
+
+  def verify!
+    self.verified = true
+    self.save
+  end
+
+  def update_password(password)
+    self.password_digest = BCrypt::Password.create(password)
+    self.save
   end
 
   private

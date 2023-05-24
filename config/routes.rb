@@ -18,12 +18,10 @@ Rails.application.routes.draw do
 
       # auth
       scope '/auth' do
-        post 'verify', to: 'auth#confirm_verification'
         post 'login', to: 'auth#login', as: 'login'
         put 'logout', to: 'auth#logout', as: 'logout'
-        post 'password_reset', to: 'auth#password_reset'
-        post 'confirm_reset', to: 'auth#confirm_password_reset'
-        post 'send_code', to: 'auth#send_code'
+        post 'request_code', to: 'auth#request_code'
+        post 'verify', to: 'auth#verify'
       end
     end
   end

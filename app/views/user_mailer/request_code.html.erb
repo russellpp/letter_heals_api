@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+
+    </style>
+  </head>
+  <body>
+    <h1>Email Verification</h1>
+    <p>Hello <%= @user.name %>,</p>
+    <p>Please verify your email address by clicking the following link or entering the 6-digit code:</p>
+     <p>
+      <%= link_to 'Verify Email', "http://127.0.0.1:3000/api/v1/auth/verify?email=#{@user.email}&code=#{@code}&request=verification" %>
+    </p>
+  </body>
+</html>
